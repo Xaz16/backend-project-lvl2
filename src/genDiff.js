@@ -13,7 +13,12 @@ export default (firstObject, secondObject, level = 0) => {
       if (firstValue === secondValue) {
         changes.push({ key, value: firstValue, type: 'same' });
       } else {
-        changes.push({ type: 'different', key, beforeValue: firstValue, afterValue: secondValue });
+        changes.push({
+          type: 'different',
+          key,
+          beforeValue: firstValue,
+          afterValue: secondValue,
+        });
       }
     } else {
       changes.push({ key, value: firstValue, type: 'removed' });
@@ -24,30 +29,38 @@ export default (firstObject, secondObject, level = 0) => {
   if (addedKeys.length) {
     const dataForPush = addedKeys.map((key) => ({
       type: 'added',
-      key: key,
+      key,
       value: secondObject[key],
     }));
     changes.push(...dataForPush);
   }
 
-  const separator = ` `.repeat(level + 2);
+  const separator = ' '.repeat(level + 2);
 
   const data = changes
     .sort((a, b) => a.key.localeCompare(b.key))
     .map((change) => {
       const { type, key, value } = change;
+      let result;
 
       switch (type) {
         case 'same':
-          return `${key}: ${value}`;
+          result = `${key}: ${value}`;
+          break;
         case 'added':
-          return `+ ${key}: ${value}`;
+          result = `+ ${key}: ${value}`;
+          break;
         case 'removed':
-          return `- ${key}: ${value}`;
+          result = `- ${key}: ${value}`;
+          break;
         case 'different':
-          const { beforeValue, afterValue } = change;
-          return `- ${key}: ${beforeValue}\n${separator}+ ${key}: ${afterValue}`;
+          result = `- ${key}: ${change.beforeValue}\n${separator}+ ${key}: ${change.afterValue}`;
+          break;
+        default:
+          break;
       }
+
+      return result;
     });
 
   const joinString = `\n${separator}`;

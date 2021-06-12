@@ -1,1 +1,1 @@
-export * from './genDiff.js';
+export * as genDiff from './genDiff.js';
