@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 import { Command } from 'commander/esm.mjs';
-import * as fs from 'fs';
-import * as path from 'path';
-import genDiff from '../src/genDiff.js';
+import mainAction from '../src/actions/action.js';
 
 const program = new Command();
 
@@ -13,13 +11,7 @@ program
   .option('-f, --format [type]', 'output format')
   .parse(process.argv)
   .action((firstFilePath, secondFilePath) => {
-    const preparedFirstPath = path.resolve(firstFilePath);
-    const preparedSecondPath = path.resolve(secondFilePath);
-    const firstObject = JSON.parse(fs.readFileSync(preparedFirstPath), 'utf-8');
-    const secondObject = JSON.parse(fs.readFileSync(preparedSecondPath), 'utf-8');
-
-    const data = genDiff(firstObject, secondObject);
-
+    const data = mainAction(firstFilePath, secondFilePath);
     console.log(data);
   });
 
