@@ -39,3 +39,37 @@ describe('main action', () => {
     expect(secondResult).toEqual(expectedResult);
   });
 });
+
+describe('main action deep', () => {
+  const fixtureDir = path.resolve(__dirname, '__fixtures__');
+  const getFixtureFilePath = (fileName) => path.join(fixtureDir, fileName);
+
+  const firstExampleJsonPath = getFixtureFilePath('file3.json');
+  const firstExampleYmlPath = getFixtureFilePath('file3.yml');
+  const secondExampleJsonPath = getFixtureFilePath('file4.json');
+  const secondExampleYamlPath = getFixtureFilePath('file4.yaml');
+  const resultPath = getFixtureFilePath('result2.txt');
+
+  let expectedResult;
+
+  beforeAll(() => {
+    expectedResult = fs.readFileSync(resultPath, 'utf-8');
+  });
+
+  it('should compare flat objects in json', () => {
+    const result = action(firstExampleJsonPath, secondExampleJsonPath);
+    expect(result).toEqual(expectedResult);
+  });
+
+  it('should compare flat objects in yml/yaml', () => {
+    const result = action(firstExampleYmlPath, secondExampleYamlPath);
+    expect(result).toEqual(expectedResult);
+  });
+
+  it('should compare flat objects in yml/yaml or/and json', () => {
+    const firstResult = action(firstExampleYmlPath, secondExampleJsonPath);
+    expect(firstResult).toEqual(expectedResult);
+    const secondResult = action(firstExampleJsonPath, secondExampleYamlPath);
+    expect(secondResult).toEqual(expectedResult);
+  });
+});
