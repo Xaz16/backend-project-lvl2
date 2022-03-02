@@ -13,7 +13,7 @@ describe('main action', () => {
   const firstExampleJsonPath = getFixtureFilePath('file1.json');
   const firstExampleYmlPath = getFixtureFilePath('file1.yml');
   const secondExampleJsonPath = getFixtureFilePath('file2.json');
-  const secondExampleYamlPath = getFixtureFilePath('file2.yaml');
+  const secondExampleYamlPath = getFixtureFilePath('file2.yml');
   const resultPath = getFixtureFilePath('result.txt');
 
   let expectedResult;
@@ -23,19 +23,19 @@ describe('main action', () => {
   });
 
   it('should compare flat objects in json', () => {
-    const result = action(firstExampleJsonPath, secondExampleJsonPath);
+    const result = action([firstExampleJsonPath, secondExampleJsonPath]);
     expect(result).toEqual(expectedResult);
   });
 
   it('should compare flat objects in yml/yaml', () => {
-    const result = action(firstExampleYmlPath, secondExampleYamlPath);
+    const result = action([firstExampleYmlPath, secondExampleYamlPath]);
     expect(result).toEqual(expectedResult);
   });
 
   it('should compare flat objects in yml/yaml or/and json', () => {
-    const firstResult = action(firstExampleYmlPath, secondExampleJsonPath);
+    const firstResult = action([firstExampleYmlPath, secondExampleJsonPath]);
     expect(firstResult).toEqual(expectedResult);
-    const secondResult = action(firstExampleJsonPath, secondExampleYamlPath);
+    const secondResult = action([firstExampleJsonPath, secondExampleYamlPath]);
     expect(secondResult).toEqual(expectedResult);
   });
 });
@@ -57,19 +57,19 @@ describe('main action deep', () => {
   });
 
   it('should compare flat objects in json', () => {
-    const result = action(firstExampleJsonPath, secondExampleJsonPath);
+    const result = action([firstExampleJsonPath, secondExampleJsonPath]);
     expect(result).toEqual(expectedResult);
   });
 
   it('should compare flat objects in yml/yaml', () => {
-    const result = action(firstExampleYmlPath, secondExampleYamlPath);
+    const result = action([firstExampleYmlPath, secondExampleYamlPath]);
     expect(result).toEqual(expectedResult);
   });
 
   it('should compare flat objects in yml/yaml or/and json', () => {
-    const firstResult = action(firstExampleYmlPath, secondExampleJsonPath);
+    const firstResult = action([firstExampleYmlPath, secondExampleJsonPath]);
     expect(firstResult).toEqual(expectedResult);
-    const secondResult = action(firstExampleJsonPath, secondExampleYamlPath);
+    const secondResult = action([firstExampleJsonPath, secondExampleYamlPath]);
     expect(secondResult).toEqual(expectedResult);
   });
 });

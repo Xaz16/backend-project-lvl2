@@ -11,60 +11,37 @@ export default (firstObject, secondObject, level = 0) => {
 
     if (isExist) {
       if (firstValue === secondValue) {
-        changes.push({ key, value: firstValue, type: 'same' });
+        changes.push({
+          key, value: firstValue, type: 'same', level,
+        });
       } else {
         changes.push({
           type: 'different',
           key,
           beforeValue: firstValue,
           afterValue: secondValue,
+          level,
         });
       }
     } else {
-      changes.push({ key, value: firstValue, type: 'removed' });
+      changes.push({
+        key, value: firstValue, type: 'removed', level,
+      });
     }
   });
 
-  const addedKeys = secondKeys.filter((secondKey) => !firstKeys.includes(secondKey));
+  const addedKeys = secondKeys.filter(
+    (secondKey) => !firstKeys.includes(secondKey),
+  );
   if (addedKeys.length) {
     const dataForPush = addedKeys.map((key) => ({
       type: 'added',
       key,
       value: secondObject[key],
+      level,
     }));
     changes.push(...dataForPush);
   }
 
-  const separator = ' '.repeat(level + 2);
-
-  const data = changes
-    .sort((a, b) => a.key.localeCompare(b.key))
-    .map((change) => {
-      const { type, key, value } = change;
-      let result;
-
-      switch (type) {
-        case 'same':
-          result = `${key}: ${value}`;
-          break;
-        case 'added':
-          result = `+ ${key}: ${value}`;
-          break;
-        case 'removed':
-          result = `- ${key}: ${value}`;
-          break;
-        case 'different':
-          result = `- ${key}: ${change.beforeValue}\n${separator}+ ${key}: ${change.afterValue}`;
-          break;
-        default:
-          break;
-      }
-
-      return result;
-    });
-
-  const joinString = `\n${separator}`;
-  const resultString = `{\n  ${data.join(joinString)}\n}`;
-
-  return resultString;
+  return changes;
 };

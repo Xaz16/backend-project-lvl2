@@ -2,7 +2,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import genDiff from '../genDiff.js';
 import getFileFormat from '../getFileFormat.js';
-import getParser from '../parsers/parserFactory.js';
+import getParser from '../parsers/factory.js';
+import getFormater from '../formaters/factory.js';
 
 const extractData = (filePath) => {
   const resolvedPath = path.resolve(filePath);
@@ -13,10 +14,12 @@ const extractData = (filePath) => {
   return data;
 };
 
-export default (...paths) => {
+export default (paths, format = 'stylish') => {
   const objects = paths.map((filePath) => extractData(filePath));
 
-  const data = genDiff(...objects);
+  const changes = genDiff(...objects);
+  const formater = getFormater(format);
+  const data = formater(changes);
 
   return data;
 };

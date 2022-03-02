@@ -8,10 +8,10 @@ program
   .version('0.0.1')
   .description('Compares two configuration files and shows a difference.')
   .arguments('<filepath1> <filepath2>')
-  .option('-f, --format [type]', 'output format')
+  .option('-f, --format [type]', 'output format', 'stylish')
   .parse(process.argv)
   .action((firstFilePath, secondFilePath) => {
-    const data = mainAction(firstFilePath, secondFilePath);
+    const data = mainAction([firstFilePath, secondFilePath], this.opts().format);
     console.log(data);
   });
 
