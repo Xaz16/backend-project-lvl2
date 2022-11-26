@@ -1,4 +1,4 @@
-import yaml from 'yaml/index.js';
+import yaml from 'yaml';
 
 const parserFactory = (format) => {
   switch (format) {

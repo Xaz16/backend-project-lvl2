@@ -1,12 +1,15 @@
-import stylishFormater from './stylish.js';
+import stylishFormatter from './stylish.js';
+import plainFormatter from './plain.js';
 
-const formaterFactory = (format) => {
+const formatterFactory = (format) => {
   switch (format) {
     case 'stylish':
-      return stylishFormater;
+      return stylishFormatter;
+    case 'plain':
+      return plainFormatter;
     default:
       throw new Error(`Unknown format! ${format}`);
   }
 };
 
-export default formaterFactory;
+export default formatterFactory;
