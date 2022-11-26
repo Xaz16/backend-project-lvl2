@@ -6,7 +6,7 @@ import action from '../src/actions/action.js';
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-describe('main action deep', () => {
+describe('main action deep stylish', () => {
   const fixtureDir = path.resolve(__dirname, '__fixtures__');
   const getFixtureFilePath = (fileName) => path.join(fixtureDir, fileName);
 
@@ -70,6 +70,45 @@ describe('main action plain', () => {
     const firstResult = action([firstExampleYmlPath, secondExampleJsonPath], 'plain');
     expect(firstResult).toEqual(expectedResult);
     const secondResult = action([firstExampleJsonPath, secondExampleYamlPath], 'plain');
+    expect(secondResult).toEqual(expectedResult);
+  });
+});
+
+describe('main action json', () => {
+  const fixtureDir = path.resolve(__dirname, '__fixtures__');
+  const getFixtureFilePath = (fileName) => path.join(fixtureDir, fileName);
+
+  const firstExampleJsonPath = getFixtureFilePath('file3.json');
+  const firstExampleYmlPath = getFixtureFilePath('file3.yml');
+  const secondExampleJsonPath = getFixtureFilePath('file4.json');
+  const secondExampleYamlPath = getFixtureFilePath('file4.yml');
+  const resultPath = getFixtureFilePath('result4.txt');
+
+  let expectedResult;
+
+  beforeAll(() => {
+    expectedResult = fs.readFileSync(resultPath, 'utf-8');
+  });
+
+  it('should compare deep objects in json', () => {
+    action([firstExampleJsonPath, secondExampleJsonPath], 'json');
+    const result = fs.readFileSync('./result.json', 'utf-8');
+    expect(result).toEqual(expectedResult);
+  });
+
+  it('should compare deep objects in yml/yaml', () => {
+    action([firstExampleYmlPath, secondExampleYamlPath], 'json');
+    const result = fs.readFileSync('./result.json', 'utf-8');
+    expect(result).toEqual(expectedResult);
+  });
+
+  it('should compare deep objects in yml/yaml or/and json', () => {
+    action([firstExampleYmlPath, secondExampleJsonPath], 'json');
+    const firstResult = fs.readFileSync('./result.json', 'utf-8');
+    expect(firstResult).toEqual(expectedResult);
+
+    action([firstExampleJsonPath, secondExampleYamlPath], 'json');
+    const secondResult = fs.readFileSync('./result.json', 'utf-8');
     expect(secondResult).toEqual(expectedResult);
   });
 });
