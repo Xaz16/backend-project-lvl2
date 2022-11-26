@@ -1,4 +1,6 @@
-export default (firstObject, secondObject, level = 0) => {
+import isObject from './utils/isObject.js';
+
+const getDiff = (firstObject, secondObject, level = 1) => {
   const firstKeys = Object.keys(firstObject);
   const secondKeys = Object.keys(secondObject);
 
@@ -10,9 +12,22 @@ export default (firstObject, secondObject, level = 0) => {
     const secondValue = secondObject[key];
 
     if (isExist) {
+      if (isObject(firstValue) && isObject(secondValue)) {
+        changes.push({
+          key,
+          type: 'nested',
+          value: getDiff(firstValue, secondValue, level + 1),
+          level,
+        });
+        return;
+      }
+
       if (firstValue === secondValue) {
         changes.push({
-          key, value: firstValue, type: 'same', level,
+          key,
+          value: firstValue,
+          type: 'same',
+          level,
         });
       } else {
         changes.push({
@@ -25,14 +40,15 @@ export default (firstObject, secondObject, level = 0) => {
       }
     } else {
       changes.push({
-        key, value: firstValue, type: 'removed', level,
+        key,
+        value: firstValue,
+        type: 'removed',
+        level,
       });
     }
   });
 
-  const addedKeys = secondKeys.filter(
-    (secondKey) => !firstKeys.includes(secondKey),
-  );
+  const addedKeys = secondKeys.filter((secondKey) => !firstKeys.includes(secondKey));
   if (addedKeys.length) {
     const dataForPush = addedKeys.map((key) => ({
       type: 'added',
@@ -45,3 +61,5 @@ export default (firstObject, secondObject, level = 0) => {
 
   return changes;
 };
+
+export default getDiff;
