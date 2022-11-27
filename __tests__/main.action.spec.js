@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as url from 'url';
 import * as path from 'path';
-import action from '../src/actions/action.js';
+import action from '../src/public-api';
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -79,24 +79,15 @@ describe('main action json', () => {
   const expectedResult = fs.readFileSync(resultPath, 'utf-8');
 
   it('should compare deep objects in json', () => {
-    action([firstExampleJsonPath, secondExampleJsonPath], 'json');
-    const result = fs.readFileSync('./result.json', 'utf-8');
-    expect(result).toEqual(expectedResult);
+    expect(action([firstExampleJsonPath, secondExampleJsonPath], 'json')).toEqual(expectedResult);
   });
 
   it('should compare deep objects in yml/yaml', () => {
-    action([firstExampleYmlPath, secondExampleYamlPath], 'json');
-    const result = fs.readFileSync('./result.json', 'utf-8');
-    expect(result).toEqual(expectedResult);
+    expect(action([firstExampleYmlPath, secondExampleYamlPath], 'json')).toEqual(expectedResult);
   });
 
   it('should compare deep objects in yml/yaml or/and json', () => {
-    action([firstExampleYmlPath, secondExampleJsonPath], 'json');
-    const firstResult = fs.readFileSync('./result.json', 'utf-8');
-    expect(firstResult).toEqual(expectedResult);
-
-    action([firstExampleJsonPath, secondExampleYamlPath], 'json');
-    const secondResult = fs.readFileSync('./result.json', 'utf-8');
-    expect(secondResult).toEqual(expectedResult);
+    expect(action([firstExampleYmlPath, secondExampleJsonPath], 'json')).toEqual(expectedResult);
+    expect(action([firstExampleJsonPath, secondExampleYamlPath], 'json')).toEqual(expectedResult);
   });
 });
