@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import isObject from '../utils/isObject.js';
 
 const addToPath = (path, key) => (path.length !== 0 ? `${path}.${key}` : key);
@@ -12,33 +13,36 @@ const formatValue = (value) => {
   return value;
 };
 
-const format = (changes, path = '') => changes
-  .sort((a, b) => a.key?.localeCompare(b.key))
-  .map((change) => {
-    switch (change.type) {
-      case 'nested':
-        return format(change.value, `${addToPath(path, change.key)}`);
+const format = (changes, path = '') => {
+  const sortedChanges = _.sortBy(changes, (change) => change.key);
 
-      case 'added':
-        return `Property '${addToPath(path, change.key)}' was added with value: ${formatValue(
-          change.value,
-        )}`;
+  return sortedChanges
+    .map((change) => {
+      switch (change.type) {
+        case 'nested':
+          return format(change.value, `${addToPath(path, change.key)}`);
 
-      case 'removed':
-        return `Property '${addToPath(path, change.key)}' was removed`;
+        case 'added':
+          return `Property '${addToPath(path, change.key)}' was added with value: ${formatValue(
+            change.value,
+          )}`;
 
-      case 'different':
-        return `Property '${addToPath(path, change.key)}' was updated. From ${formatValue(
-          change.beforeValue,
-        )} to ${formatValue(change.afterValue)}`;
+        case 'removed':
+          return `Property '${addToPath(path, change.key)}' was removed`;
 
-      default:
-        break;
-    }
+        case 'different':
+          return `Property '${addToPath(path, change.key)}' was updated. From ${formatValue(
+            change.beforeValue,
+          )} to ${formatValue(change.afterValue)}`;
 
-    return null;
-  })
-  .filter((val) => val)
-  .join('\n');
+        default:
+          break;
+      }
+
+      return null;
+    })
+    .filter((val) => val)
+    .join('\n');
+};
 
 export default format;

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import isObject from '../utils/isObject.js';
 
 const toString = (value, separator, level) => {
@@ -16,42 +17,41 @@ const toString = (value, separator, level) => {
 
 const format = (changes, rootLevel = 0) => {
   const rootSeparator = '    ';
+  const sortedChanges = _.sortBy(changes, (change) => change.key);
 
-  const data = changes
-    .sort((a, b) => a.key?.localeCompare(b.key))
-    .map((change) => {
-      const {
-        type, key, value: rawValue, level,
-      } = change;
-      const separator = rootSeparator.repeat(level);
+  const data = sortedChanges.map((change) => {
+    const {
+      type, key, value: rawValue, level,
+    } = change;
+    const separator = rootSeparator.repeat(level);
 
-      const value = toString(rawValue, rootSeparator, level);
+    const value = toString(rawValue, rootSeparator, level);
 
-      switch (type) {
-        case 'nested':
-          return `${separator}${key}: ${format(change.value, level)}`;
-        case 'same':
-          return `${separator}${key}: ${value}`;
-        case 'added':
-          return `${separator.replace(/ {2}$/, '+ ')}${key}: ${value}`;
-        case 'removed':
-          return `${separator.replace(/ {2}$/, '- ')}${key}: ${value}`;
-        case 'different': {
-          const beforeValue = toString(change.beforeValue, rootSeparator, level);
-          const afterValue = toString(change.afterValue, rootSeparator, level);
+    switch (type) {
+      case 'nested':
+        return `${separator}${key}: ${format(change.value, level)}`;
+      case 'same':
+        return `${separator}${key}: ${value}`;
+      case 'added':
+        return `${separator.replace(/ {2}$/, '+ ')}${key}: ${value}`;
+      case 'removed':
+        return `${separator.replace(/ {2}$/, '- ')}${key}: ${value}`;
+      case 'different': {
+        const beforeValue = toString(change.beforeValue, rootSeparator, level);
+        const afterValue = toString(change.afterValue, rootSeparator, level);
 
-          return `${separator.replace(/ {2}$/, '- ')}${key}: ${beforeValue}\n${separator.replace(
-            / {2}$/,
-            '+ ',
-          )}${key}: ${afterValue}`;
-        }
-
-        default:
-          break;
+        return `${separator.replace(/ {2}$/, '- ')}${key}: ${beforeValue}\n${separator.replace(
+          / {2}$/,
+          '+ ',
+        )}${key}: ${afterValue}`;
       }
 
-      return change;
-    });
+      default:
+        break;
+    }
+
+    return change;
+  });
 
   const resultString = `{\n${data.join('\n')}\n${rootSeparator.repeat(rootLevel)}}`;
 
