@@ -5,7 +5,7 @@ import mainAction from '../src/actions/action.js';
 const program = new Command();
 
 function action(firstFilePath, secondFilePath) {
-  const data = mainAction([firstFilePath, secondFilePath], this.opts().format);
+  const data = mainAction(firstFilePath, secondFilePath, this.opts().format);
   console.log(data);
 }
 
