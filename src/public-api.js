@@ -1,3 +1,3 @@
-import genDiff from './genDiff.js';
+import action from './actions/action.js';
 
-export default genDiff;
+export default action;
