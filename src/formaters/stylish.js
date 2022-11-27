@@ -24,7 +24,6 @@ const format = (changes, rootLevel = 0) => {
         type, key, value: rawValue, level,
       } = change;
       const separator = rootSeparator.repeat(level);
-      let result;
 
       const value = toString(rawValue, rootSeparator, level);
 
@@ -51,7 +50,7 @@ const format = (changes, rootLevel = 0) => {
           break;
       }
 
-      return result;
+      return change;
     });
 
   const resultString = `{\n${data.join('\n')}\n${rootSeparator.repeat(rootLevel)}}`;
