@@ -21,4 +21,4 @@
 
 ## Deep compare json formatter
 
-[![asciicast](https://asciinema.org/a/7NsflCcGtQIcsnKF6fXjYEuto.svg)](https://asciinema.org/a/7NsflCcGtQIcsnKF6fXjYEuto)
+[![asciicast](https://asciinema.org/a/RVLi4UG9lBjltVu9Qc1ODmJ0V.svg)](https://asciinema.org/a/RVLi4UG9lBjltVu9Qc1ODmJ0V)
