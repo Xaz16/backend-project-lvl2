@@ -16,11 +16,7 @@ describe('main action deep stylish', () => {
   const secondExampleYamlPath = getFixtureFilePath('file4.yml');
   const resultPath = getFixtureFilePath('result2.txt');
 
-  let expectedResult;
-
-  beforeAll(() => {
-    expectedResult = fs.readFileSync(resultPath, 'utf-8');
-  });
+  const expectedResult = fs.readFileSync(resultPath, 'utf-8');
 
   it('should compare deep objects in json', () => {
     const result = action([firstExampleJsonPath, secondExampleJsonPath]);
@@ -50,11 +46,7 @@ describe('main action plain', () => {
   const secondExampleYamlPath = getFixtureFilePath('file4.yml');
   const resultPath = getFixtureFilePath('result3.txt');
 
-  let expectedResult;
-
-  beforeAll(() => {
-    expectedResult = fs.readFileSync(resultPath, 'utf-8');
-  });
+  const expectedResult = fs.readFileSync(resultPath, 'utf-8');
 
   it('should compare deep objects in json', () => {
     const result = action([firstExampleJsonPath, secondExampleJsonPath], 'plain');
@@ -84,11 +76,7 @@ describe('main action json', () => {
   const secondExampleYamlPath = getFixtureFilePath('file4.yml');
   const resultPath = getFixtureFilePath('result4.txt');
 
-  let expectedResult;
-
-  beforeAll(() => {
-    expectedResult = fs.readFileSync(resultPath, 'utf-8');
-  });
+  const expectedResult = fs.readFileSync(resultPath, 'utf-8');
 
   it('should compare deep objects in json', () => {
     action([firstExampleJsonPath, secondExampleJsonPath], 'json');

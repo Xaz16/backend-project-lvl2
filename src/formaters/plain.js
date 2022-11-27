@@ -2,43 +2,41 @@ import isObject from '../utils/isObject.js';
 
 const addToPath = (path, key) => (path.length !== 0 ? `${path}.${key}` : key);
 const formatValue = (value) => {
-  let result = value;
   if (isObject(value) || Array.isArray(value)) {
-    result = '[complex value]';
-  } else if (typeof result === 'string') {
-    result = `'${value}'`;
+    return '[complex value]';
+  }
+  if (typeof value === 'string') {
+    return `'${value}'`;
   }
 
-  return result;
+  return value;
 };
 
 const format = (changes, path = '') => changes
   .sort((a, b) => a.key?.localeCompare(b.key))
   .map((change) => {
-    let result;
-
     switch (change.type) {
       case 'nested':
-        result = format(change.value, `${addToPath(path, change.key)}`);
-        break;
+        return format(change.value, `${addToPath(path, change.key)}`);
+
       case 'added':
-        result = `Property '${addToPath(path, change.key)}' was added with value: ${formatValue(
+        return `Property '${addToPath(path, change.key)}' was added with value: ${formatValue(
           change.value,
         )}`;
-        break;
+
       case 'removed':
-        result = `Property '${addToPath(path, change.key)}' was removed`;
-        break;
+        return `Property '${addToPath(path, change.key)}' was removed`;
+
       case 'different':
-        result = `Property '${addToPath(path, change.key)}' was updated. From ${formatValue(
+        return `Property '${addToPath(path, change.key)}' was updated. From ${formatValue(
           change.beforeValue,
         )} to ${formatValue(change.afterValue)}`;
-        break;
+
       default:
         break;
     }
 
-    return result;
+    return null;
   })
   .filter((val) => val)
   .join('\n');
