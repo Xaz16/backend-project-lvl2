@@ -19,19 +19,19 @@ describe('main action deep stylish', () => {
   const expectedResult = fs.readFileSync(resultPath, 'utf-8');
 
   it('should compare deep objects in json', () => {
-    const result = action([firstExampleJsonPath, secondExampleJsonPath]);
+    const result = action(firstExampleJsonPath, secondExampleJsonPath);
     expect(result).toEqual(expectedResult);
   });
 
   it('should compare deep objects in yml/yaml', () => {
-    const result = action([firstExampleYmlPath, secondExampleYamlPath]);
+    const result = action(firstExampleYmlPath, secondExampleYamlPath);
     expect(result).toEqual(expectedResult);
   });
 
   it('should compare deep objects in yml/yaml or/and json', () => {
-    const firstResult = action([firstExampleYmlPath, secondExampleJsonPath]);
+    const firstResult = action(firstExampleYmlPath, secondExampleJsonPath);
     expect(firstResult).toEqual(expectedResult);
-    const secondResult = action([firstExampleJsonPath, secondExampleYamlPath]);
+    const secondResult = action(firstExampleJsonPath, secondExampleYamlPath);
     expect(secondResult).toEqual(expectedResult);
   });
 });
@@ -49,19 +49,19 @@ describe('main action plain', () => {
   const expectedResult = fs.readFileSync(resultPath, 'utf-8');
 
   it('should compare deep objects in json', () => {
-    const result = action([firstExampleJsonPath, secondExampleJsonPath], 'plain');
+    const result = action(firstExampleJsonPath, secondExampleJsonPath, 'plain');
     expect(result).toEqual(expectedResult);
   });
 
   it('should compare deep objects in yml/yaml', () => {
-    const result = action([firstExampleYmlPath, secondExampleYamlPath], 'plain');
+    const result = action(firstExampleYmlPath, secondExampleYamlPath, 'plain');
     expect(result).toEqual(expectedResult);
   });
 
   it('should compare deep objects in yml/yaml or/and json', () => {
-    const firstResult = action([firstExampleYmlPath, secondExampleJsonPath], 'plain');
+    const firstResult = action(firstExampleYmlPath, secondExampleJsonPath, 'plain');
     expect(firstResult).toEqual(expectedResult);
-    const secondResult = action([firstExampleJsonPath, secondExampleYamlPath], 'plain');
+    const secondResult = action(firstExampleJsonPath, secondExampleYamlPath, 'plain');
     expect(secondResult).toEqual(expectedResult);
   });
 });
@@ -79,15 +79,15 @@ describe('main action json', () => {
   const expectedResult = fs.readFileSync(resultPath, 'utf-8');
 
   it('should compare deep objects in json', () => {
-    expect(action([firstExampleJsonPath, secondExampleJsonPath], 'json')).toEqual(expectedResult);
+    expect(action(firstExampleJsonPath, secondExampleJsonPath, 'json')).toEqual(expectedResult);
   });
 
   it('should compare deep objects in yml/yaml', () => {
-    expect(action([firstExampleYmlPath, secondExampleYamlPath], 'json')).toEqual(expectedResult);
+    expect(action(firstExampleYmlPath, secondExampleYamlPath, 'json')).toEqual(expectedResult);
   });
 
   it('should compare deep objects in yml/yaml or/and json', () => {
-    expect(action([firstExampleYmlPath, secondExampleJsonPath], 'json')).toEqual(expectedResult);
-    expect(action([firstExampleJsonPath, secondExampleYamlPath], 'json')).toEqual(expectedResult);
+    expect(action(firstExampleYmlPath, secondExampleJsonPath, 'json')).toEqual(expectedResult);
+    expect(action(firstExampleJsonPath, secondExampleYamlPath, 'json')).toEqual(expectedResult);
   });
 });
