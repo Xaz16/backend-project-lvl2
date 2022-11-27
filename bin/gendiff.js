@@ -4,17 +4,16 @@ import mainAction from '../src/actions/action.js';
 
 const program = new Command();
 
-function action(firstFilePath, secondFilePath) {
-  const data = mainAction(firstFilePath, secondFilePath, this.opts().format);
-  console.log(data);
-}
-
 program
   .version('0.0.1')
   .description('Compares two configuration files and shows a difference.')
   .arguments('<filepath1> <filepath2>')
   .option('-f, --format [type]', 'output format', 'stylish')
   .parse(process.argv)
-  .action(action);
+  .action((firstFilePath, secondFilePath) => {
+    // eslint-disable-next-line no-undef
+    const data = mainAction(firstFilePath, secondFilePath, opts().format);
+    console.log(data);
+  });
 
 program.parse(process.argv);

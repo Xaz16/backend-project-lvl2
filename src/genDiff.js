@@ -4,62 +4,55 @@ const getDiff = (firstObject, secondObject, level = 1) => {
   const firstKeys = Object.keys(firstObject);
   const secondKeys = Object.keys(secondObject);
 
-  const changes = [];
-
-  firstKeys.forEach((key) => {
+  const firstChanges = firstKeys.map((key) => {
     const isExist = secondKeys.includes(key);
     const firstValue = firstObject[key];
     const secondValue = secondObject[key];
 
     if (isExist) {
       if (isObject(firstValue) && isObject(secondValue)) {
-        changes.push({
+        return {
           key,
           type: 'nested',
           value: getDiff(firstValue, secondValue, level + 1),
           level,
-        });
-        return;
+        };
       }
 
       if (firstValue === secondValue) {
-        changes.push({
+        return {
           key,
           value: firstValue,
           type: 'same',
           level,
-        });
-      } else {
-        changes.push({
-          type: 'different',
-          key,
-          beforeValue: firstValue,
-          afterValue: secondValue,
-          level,
-        });
+        };
       }
-    } else {
-      changes.push({
+      return {
+        type: 'different',
         key,
-        value: firstValue,
-        type: 'removed',
+        beforeValue: firstValue,
+        afterValue: secondValue,
         level,
-      });
+      };
     }
+    return {
+      key,
+      value: firstValue,
+      type: 'removed',
+      level,
+    };
   });
 
-  const addedKeys = secondKeys.filter((secondKey) => !firstKeys.includes(secondKey));
-  if (addedKeys.length) {
-    const dataForPush = addedKeys.map((key) => ({
+  const addedKeys = secondKeys
+    .filter((secondKey) => !firstKeys.includes(secondKey))
+    .map((key) => ({
       type: 'added',
       key,
       value: secondObject[key],
       level,
     }));
-    changes.push(...dataForPush);
-  }
 
-  return changes;
+  return [...firstChanges, ...addedKeys];
 };
 
 export default getDiff;
